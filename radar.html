@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Maturity Radar</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="radarChart" width="400" height="400"></canvas>
+
+  <script>
+  // Mapping numbers to descriptive levels
+  const levelLabels = {
+    1: "L1 – Minimal/No AI",
+    2: "L2 – Emerging/Basic",
+    3: "L3 – Comprehensive/Integrated",
+    4: "L4 – Transformational/Strategic"
+  };
+
+  // Read URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+
+  function getValue(param) {
+    const val = parseInt(urlParams.get(param));
+    return val ? val : 0;
+  }
+
+  // Read all variables
+  const strategy = getValue('strategy');
+  const implementation = getValue('implementation');
+  const benefits = getValue('benefits');
+  const change = getValue('change');
+  const leadership = getValue('leadership');
+  const data = getValue('data');
+  const partners = getValue('partners');
+  const lifecycle = getValue('lifecycle');
+  const talent = getValue('talent');
+
+  // Prepare chart data
+  const radarData = {
+    labels: ['Strategy','Implementation','Benefits','Change','Leadership','Data','Partners','Lifecycle','Talent'],
+    datasets: [{
+      label: 'Your AI Maturity',
+      data: [strategy, implementation, benefits, change, leadership, data, partners, lifecycle, talent],
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 2,
+      pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+    }]
+  };
+
+  // Create the radar chart
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  const radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: radarData,
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0,
+          max: 4,
+          ticks: { stepSize: 1 }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const val = context.raw;
+              const desc = levelLabels[val] || 'No data';
+              return `Score: ${val} → ${desc}`;
+            }
+          }
+        }
+      }
+    }
+  });
+  </script>
+</body>
+</html>
